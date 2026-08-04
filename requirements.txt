@@ -1,0 +1,9 @@
+kagglehub
+pandas
+seaborn 
+matplotlib
+huggingface_hub
+ipykernel
+scipy
+kaggle
+thefuzz
