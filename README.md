@@ -1,0 +1,1 @@
+In this repo I have notes from my studies for future reference. Much is composed from the Associate Data Scientist Career Track in Datacamp.com, as well as my program in AI and Machine Learning at It-Högskolan.
