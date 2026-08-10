@@ -15,6 +15,13 @@ git checkout HEAD~1 -- report.md
 git restore --staged report.md
 git restore --staged
 
+git diff main chatbot
+git branch
+git branch -m old_name new_name
+git branch -d chatbot
+git branch -D chatbot
+
+
 
 
 ### The commit structure
@@ -169,3 +176,144 @@ This will move the file back to the working directory, allowing us to edit it be
 To unstage all files:
 
     git restore --staged
+
+# Working with branches
+Branch= an individual version of a repo. Git uses branches to systematically track multiple versions of files. 
+
+By default, every repo has a branch called main. Generally, this is where we store our working application. In a seperate branch, we can develop and test a new feature. 
+Branches allow multiple developers to work on a project simultaneosly. Git makes it easy to compare the state of a repo between branches, and to combine contents, pushing new features to a live system. Generally, each branch should have a specfic purpose.
+
+Listing branches, * = current branch
+
+    git branch 
+
+Swtiching between branches
+
+    git switch main
+
+Creating a new branch
+
+    git branch command speed-test
+
+create a new branch and switch to it
+
+    git switch -c speed-test
+
+comparing branches
+
+    git diff main summary-statistics
+
+Navigate large git diff outputs with space to progress and q to exit.
+
+Rename . Use descriptive, consistent naming conventions like including ticket numbers.
+
+    git branch -m current_name new_name
+
+Deleting a branch - wise to do after being finished with them. 
+
+    git branch -d branch_name
+
+If we haven't merged the branch into main the -d flag will produce an error. Still possible with -D flag instead. Beware - it is not easy to recover a deleted branch.
+
+## Merging
+
+Once the task of the branch has been completed, we need to incorporate these changes into the live system, typically hosted in the main branch. 
+
+When merging two commits, the last commits form each branch are called parent commits. The branch we want to merge from is known as source. The branch we want to merge into is the destination.
+
+First switch to the destination branch.
+
+    git switch main
+
+    git merge ai-assistant
+
+If we are in a different branch we can still perform a merge, but need to include the source and destination branches in that order
+
+    git merge source destination
+
+Git merge output: first we can see the first seven characters from each branch's latest commit hashes at the top. These are the parent commits. Next, we see the type of commits, ex: Fast-forward: linear commit history, branched off main to create ai-assistand. 
+The output also shows the number of lines added or deleted per file. The final line shows the phrase "create mode", indicating a new file has been created.
+
+### Collaborations 
+
+Merge conflicts - a scenario where Git is unable to resolve differences in contents of one or more files between branches. For example: if we edit the same file in two different branches, Git won't know which version should be kept.
+
+Open the file from the terminal using the Nano command
+
+    nano README.md
+
+Git has added characters to highlight where the conflict occurs. Git shows us how the contents differ between branches. We remove the conflict syntac and make sure the file looks like it should, then save.
+
+Then add and commmit. Then try to merge again. Remember: we should avoid editing the same file in multiple branches. Prevention is better than cure when it comes to git conflicts.
+
+## Intro to remotes
+
+Local repo - on our computer. 
+Remote repo - stored in the cloud, for example on GitHub.
+Local remotes - repo copies on our computer or network. It can be useful for collaboration where cloud storage is prohibited such as in enterprises with strict data privacy rules. 
+
+Here we clone/copy a local repo
+
+    git clone /home/george/repo
+
+Cloning and naming a local project
+
+    git clone /home/geroge/repo new_repo
+
+While remotes can exist locally it is more common to store them in an an online hosting service. We can clone a remote repo on to our local computer. We do it with a URL instead of a local path: 
+
+    git clone https://github.com/datacamp/project
+
+When we clone a repo, Git remembers where the original was. It does it by storing a remote tag in the new repo's configuraiton. If we are in a repo, we can list the names of its remotes like this:
+
+    git remote
+
+If we want more information, such as the remotes ULRs, we can add the -v flag, which stands for 
+
+    git remote -v
+
+When cloning, Git will automatically name the remote as origin. We can add more remotes by specifying a name for Git to assign. 
+
+    git remote add george https://github.com/george_datacamp/repo
+
+It is useful to define the remote name as we can use it as a shortcut when merging rather than listing the URL or path.
+
+Let's look at how to get content from a remote into our local repo. Say we've been working in our local repo, nut others have been working the remote. If several people are collaborating on a project then they will access the remote work locally, save files, and synchronize their changes between the remote and local repos. This means that the remote repo should be the project's source of truth, where the latest versions of ifiles that are not drafts can be located. To synchronize the files in a remote to a local repo we need to fetch branches from the remote. 
+
+    git fetch origin
+
+This fetches all branches from the remote into the local repo. If a branch only exists in the remote it will be created in the local repo as a result of this command. Note this doesn't merge the remote repo's contents into our local repo. 
+If we want to fetch from a particular branch only, we specify it after the remote name. Here origin is the remote name, main is the branch name.
+
+    git fetch origin main 
+
+After fetching we need to synchronize content between the remote and local repos. To do this we perform a merge of the remote into our local repo. If we don't specify a local branch, the merge will be from the remote's main branch into the local branch that we are currently located in.
+
+    git merge origin 
+
+The output is the same as if we merged two local branches.
+
+Local and remote synchornization is a common workflow. Git simplifies this process for us by allowing us to fetch and merge using a single command:
+
+    git pull origin
+
+This will fetch and merge from the remote's default (main) into the local repo's current branch. As with git fetch, we can specify which remote branch to pull from by including the branch name after the remote name.
+
+    git pull origin dev
+
+Note that if we have been working locally and not yet committed our changes, then Git won't allow us to pull from the remote! 
+
+To recap, we use git pull to gather content from a remote and merge it into our local repo. The opposite of pulling is pushing, where we merge our local's repo content into a remote. 
+As with pulling contents from a remote, we need to commit local changes before we can push to the remote. 
+
+    git push prigin main
+
+If we push before pull: if we don't pull from the remote at the start of the workflow, then our local repo won't be synchronized with the remote.
+
+Recursive merge: Git opens the nano text-editor and asks us to add a message for the merge. We leave a message that we are pulling the latest report from the remote, then save and exit nano. We can avoid it, but it is not recommended.
+
+When we have a local branch that doesn't exist yet remotly:
+
+    git push origin hotfix
+
+
