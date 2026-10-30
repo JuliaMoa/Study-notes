@@ -1,1 +1,1 @@
-In this repo I have notes from my studies for future reference. Much is composed from the Associate Data Scientist Career Track in Datacamp.com where I studied during the summer to practice the bascics. 
+In this repo I have (unrevised) notes from my studies for future reference. Much is composed from the Associate Data Scientist Career Track at Datacamp.com where I studied during the summer to practice the bascics.
